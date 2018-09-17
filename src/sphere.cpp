@@ -36,3 +36,8 @@ bool Sphere::intersection(Ray ray, double &t)
     t = t1 < t2 ? (t1 >= 0 ? t1 : t2) : (t2 >= 0 ? t2 : t1);
     return true;
 }
+
+Vector Sphere::get_normal(Vector &hit_point)
+{
+    return (hit_point - position).normalized();
+}

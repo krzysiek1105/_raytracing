@@ -27,6 +27,7 @@ Primitive *hit_info(Ray ray, std::vector<Primitive *> primitives, double &t)
         }
     }
 
+    t = t_min;
     return hit;
 }
 
@@ -38,7 +39,9 @@ int main()
     primitives.push_back(new Sphere(Vector(-1.0, 0.0, 3.0), 0.4));
     primitives.push_back(new Sphere(Vector(0.0, 0.0, 3.0), 1.0));
     primitives.push_back(new Sphere(Vector(0.1, -1.5, 3.0), 0.4));
-    primitives.push_back(new Sphere(Vector(0.4, 2.0, 3.5), 0.75));
+    primitives.push_back(new Sphere(Vector(0.3, -0.5, 2.5), 0.4));
+    primitives.push_back(new Sphere(Vector(0.0, 1.5, 2.75), 0.5));
+    // primitives.push_back(new Plane(Vector(0.0, 0.2, 3.0), Vector(0.0, -1.0, 0.0)));
 
     std::vector<Light> lights;
     lights.push_back(Light(Vector(-5.0, -1.0, -3.0), 20.0));
@@ -56,8 +59,8 @@ int main()
         {
             double aspect_ratio = (double)WIDTH / HEIGHT;
 
-            Vector point_on_plane(x / (double)WIDTH - 0.5, (y / (double)HEIGHT - 0.5) / aspect_ratio, 0.0);
-            Vector dir = (point_on_plane - origin).normalized();
+            Vector point_on_screen(x / (double)WIDTH - 0.5, (y / (double)HEIGHT - 0.5) / aspect_ratio, 0.0);
+            Vector dir = (point_on_screen - origin).normalized();
             Ray ray(origin, dir);
 
             double t;
@@ -68,12 +71,14 @@ int main()
             else
             {
                 Vector hit_point = ray.direction * t + ray.origin;
-                Vector normal = (hit_point - hit->position).normalized();
+                Vector normal = hit->get_normal(hit_point);
 
                 int color = 0;
-                for (Light l : lights)
+                for (Light &l : lights)
                 {
-                    double angle_cos = normal.dot_product(l.position) / (1.0 * l.position.lenght()); // normal.lenght() = 1.0
+                    if (x == 550 && y == 550)
+                        printf("%f\n", t);
+                    double angle_cos = normal.dot_product(l.position) / (normal.lenght() * l.position.lenght());
                     int tmp = (int)(255 * angle_cos * l.intensity / (l.position.distance(hit_point) * l.position.distance(hit_point)));
 
                     Vector shadow_point = normal * SHADOW_BIAS + hit_point;
@@ -105,6 +110,6 @@ int main()
 
     fwrite(bitmap, sizeof(unsigned char), WIDTH * HEIGHT, f);
     fclose(f);
-    printf("%f\n", (clock() - (double)start) / CLOCKS_PER_SEC);
+    printf("t = %f\n", (clock() - (double)start) / CLOCKS_PER_SEC);
     return 0;
 }

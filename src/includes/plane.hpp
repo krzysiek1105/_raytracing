@@ -1,14 +1,15 @@
 #pragma once
 #include "primitive.hpp"
 
-class Sphere : public Primitive
+class Plane : public Primitive
 {
   public:
-    double radius;
+    Vector normal;
 
-    Sphere();
-    Sphere(Vector _position, double _radius);
-    ~Sphere();
+    Plane();
+    Plane(Vector _position, Vector _normal);
+    ~Plane();
+
     bool intersection(Ray ray, double &t);
     Vector get_normal(Vector &hit_point);
 };
