@@ -4,9 +4,9 @@
 class Light
 {
     public:
-    Vector position;
+    Vector direction;
     double intensity;
 
-    Light(Vector _position, double _intensity);
+    Light(Vector _direction, double _intensity);
     ~Light();
 };

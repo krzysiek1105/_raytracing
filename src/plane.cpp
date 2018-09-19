@@ -1,4 +1,5 @@
 #include "includes/plane.hpp"
+#include <stdio.h>
 
 Plane::Plane()
 {
@@ -19,18 +20,14 @@ Plane::~Plane()
 
 bool Plane::intersection(Ray ray, double &t)
 {
-    Vector n = normal.normalized();
-    Vector d = ray.direction.normalized();
-    Vector o = ray.origin.normalized();
-    Vector p = position.normalized();
-
-    double dot = n.dot_product(d);
-    if(dot <= 0.01)
+    Vector r_dir = -ray.direction;
+    double dot = normal.dot_product(r_dir);
+    if(dot <= 0.001)
         return false;
 
-    Vector v = p - o;
-    t = v.dot_product(n) / dot;
-    return t > 0;
+    Vector v = ray.origin - position;
+    t = v.dot_product(normal) / dot;
+    return t > 0.0;
 }
 
 Vector Plane::get_normal(Vector &hit_point)

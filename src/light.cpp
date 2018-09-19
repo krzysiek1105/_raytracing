@@ -1,8 +1,8 @@
 #include "includes/light.hpp"
 
-Light::Light(Vector _position, double _intensity)
+Light::Light(Vector _direction, double _intensity)
 {
-    position = _position;
+    direction = _direction;
     intensity = _intensity;
 }
 
