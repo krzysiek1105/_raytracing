@@ -1,4 +1,5 @@
 #include "includes/sphere.hpp"
+#include <stdio.h>
 
 Sphere::Sphere()
 {
@@ -14,6 +15,7 @@ Sphere::Sphere(Vector _position, double _radius)
 
 Sphere::~Sphere()
 {
+    printf("Sphere object destroyed\n");
 }
 
 bool Sphere::intersection(Ray ray, double &t)

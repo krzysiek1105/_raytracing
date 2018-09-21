@@ -5,11 +5,13 @@
 #include "includes/sphere.hpp"
 #include "includes/vector.hpp"
 #include "includes/camera.hpp"
+#include "includes/matrix.hpp"
 
 #include <vector>
 #include <stdio.h>
 #include <time.h>
 #include <cmath>
+#include <memory>
 
 #define FOV 90
 #define WIDTH 1000
@@ -39,7 +41,6 @@ int main()
     clock_t start = clock();
 
     std::vector<Primitive *> primitives;
-    primitives.push_back(new Sphere(Vector(1.0, -1.0, -2.0), 0.4));
     primitives.push_back(new Sphere(Vector(0.0, 0.0, -3.0), 1.0));
     primitives.push_back(new Sphere(Vector(0.1, -1.5, -3.0), 0.4));
     primitives.push_back(new Sphere(Vector(0.3, -0.5, -2.5), 0.4));
@@ -47,14 +48,14 @@ int main()
     primitives.push_back(new Plane(Vector(0.0, -3.0, -7.0), Vector(0.0, 1.0, 0.0)));
 
     std::vector<Light> lights;
-    lights.push_back(Light(Vector(-1.0, -1.0, -1.0), 0.5));
+    lights.push_back(Light(Vector(0.0, 0.0, -1.0), 0.25));
     lights.push_back(Light(Vector(1.0, -1.0, -1.0), 0.5));
 
-    Camera camera(WIDTH, HEIGHT, FOV, Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 0.0));
+    Camera camera(WIDTH, HEIGHT, FOV, Vector(0.0, 0.0, 0.0), Vector(-5.0, 0.0, 0.0));
 
     FILE *f = fopen("o.raw", "wb");
     unsigned char **bitmap = new unsigned char *[HEIGHT];
-    for(int i = 0; i < HEIGHT; i++)
+    for (int i = 0; i < HEIGHT; i++)
         bitmap[i] = new unsigned char[WIDTH];
 
     for (int y = 0; y < HEIGHT; y++)
