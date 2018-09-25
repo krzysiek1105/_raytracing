@@ -10,7 +10,7 @@ class Vector
 
     Vector();
     Vector(double x, double y, double z);
-    Vector operator+(Vector &v);
+    Vector operator+(Vector v);
     Vector operator-(Vector &v);
     Vector operator-();
     Vector operator*(double value);

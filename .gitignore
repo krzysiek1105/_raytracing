@@ -2,3 +2,5 @@
 *.raw
 *.txt
 .vscode/*
+renders/*
+*.obj

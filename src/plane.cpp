@@ -1,12 +1,6 @@
 #include "includes/plane.hpp"
 #include <stdio.h>
 
-Plane::Plane()
-{
-    position = Vector();
-    normal = Vector(0.0, 1.0, 0.0);
-}
-
 Plane::Plane(Vector _position, Vector _normal)
 {
     position = _position;
@@ -15,7 +9,7 @@ Plane::Plane(Vector _position, Vector _normal)
 
 Plane::~Plane()
 {
-
+    printf("Plane object destroyed\n");
 }
 
 bool Plane::intersection(Ray ray, double &t)

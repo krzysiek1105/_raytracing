@@ -3,23 +3,25 @@
 #include "ray.hpp"
 #include "matrix.hpp"
 
+#define M_PI 3.14159265359
+
 class Camera
 {
-    public:
+  public:
     int width;
     int height;
     int fov;
     Vector position;
     Vector rotation;
 
-    private:
+  private:
     double aspect_ratio;
     Vector origin;
-    Matrix *rot_x;
-    Matrix *rot_y;
-    Matrix *rot_z;
+    Matrix rot_x{3, 3};
+    Matrix rot_y{3, 3};
+    Matrix rot_z{3, 3};
 
-    public:
+  public:
     Camera(int _width, int _height, int _fov, Vector _position, Vector _rotation);
     Ray camera_ray(int x, int y);
     ~Camera();

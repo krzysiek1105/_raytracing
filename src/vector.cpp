@@ -14,7 +14,7 @@ Vector::Vector(double _x, double _y, double _z)
     z = _z;
 }
 
-Vector Vector::operator+(Vector &v)
+Vector Vector::operator+(Vector v)
 {
     return Vector(this->x + v.x, this->y + v.y, this->z + v.z);
 }
