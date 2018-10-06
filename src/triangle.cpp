@@ -1,17 +1,10 @@
 #include "includes/triangle.hpp"
-#include <stdio.h>
 
 Triangle::Triangle(Vector _vertices[3], Vector _normals[3])
 {
     vertices[0] = _vertices[0];
     vertices[1] = _vertices[1];
     vertices[2] = _vertices[2];
-
-    // Vector edge1 = vertices[1] - vertices[0];
-    // Vector edge2 = vertices[2] - vertices[0];
-    // normal = edge1.cross_product(edge2);
-
-    // normal = _normal;
 
     normals[0] = _normals[0];
     normals[1] = _normals[1];
@@ -20,21 +13,7 @@ Triangle::Triangle(Vector _vertices[3], Vector _normals[3])
 
 Triangle::~Triangle()
 {
-    // printf("triangle object destroyed\n");
 }
-
-// double AreaOfTriangle(double a, double b, double c)
-// {
-//     double p = (a + b + c) * 0.5;
-//     double area_sqr = p * (p - a) * (p - b) * (p - c);
-
-//     if (area_sqr < 0.0)
-//     {
-//         return 0.0;
-//     }
-
-//     return sqrt(area_sqr);
-// }
 
 bool Triangle::intersection(Ray ray, double &t) // Möller–Trumbore intersection algorithm
 {
@@ -71,14 +50,6 @@ bool Triangle::intersection(Ray ray, double &t) // Möller–Trumbore intersecti
 
 Vector Triangle::get_normal(Vector &hit_point)
 {
-    // Vector out;
-
-    // double dist0 = 1 / hit_point.distance(vertices[0]);
-    // double dist1 = 1 / hit_point.distance(vertices[1]);
-    // double dist2 = 1 / hit_point.distance(vertices[2]);
-    // out = (normals[0] * dist0 + normals[1] * dist1 + normals[2] * dist2) * (dist0 + dist1 + dist2);
-    // return out.normalized();
-
     Matrix v(4, 1);
     v.matrix[0][0] = hit_point.x;
     v.matrix[1][0] = hit_point.y;
@@ -108,20 +79,4 @@ Vector Triangle::get_normal(Vector &hit_point)
 
     Matrix h = r.inverse() * v;
     return (normals[0] * h.matrix[0][0] + normals[1] * h.matrix[1][0] + normals[2] * h.matrix[2][0]).normalized();
-
-    // double a = vertices[0].distance(vertices[1]);
-    // double b = vertices[1].distance(vertices[2]);
-    // double c = vertices[2].distance(vertices[0]);
-
-    // double p0 = hit_point.distance(vertices[0]);
-    // double p1 = hit_point.distance(vertices[1]);
-    // double p2 = hit_point.distance(vertices[2]);
-
-    // double n0 = AreaOfTriangle(b, p2, p1);
-    // double n1 = AreaOfTriangle(c, p0, p2);
-    // double n2 = AreaOfTriangle(a, p1, p0);
-
-    // double n = n0 + n1 + n2;
-
-    // return (normals[0] * n0 + normals[1] * n1 + normals[2] * n2) * (1 / n);
 }

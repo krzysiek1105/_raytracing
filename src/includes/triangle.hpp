@@ -1,7 +1,9 @@
 #pragma once
-#include "primitive.hpp"
+#include "vector.hpp"
+#include "ray.hpp"
+#include "matrix.hpp"
 
-class Triangle : public Primitive
+class Triangle
 {
   public:
     Vector normals[3];

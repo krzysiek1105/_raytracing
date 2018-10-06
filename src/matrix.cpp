@@ -5,9 +5,9 @@ Matrix::Matrix(int _row, int _col)
     row = _row;
     col = _col;
 
-    matrix = new double *[_row];
-    for (int i = 0; i < _row; i++)
-        matrix[i] = new double[_col];
+    matrix.resize(_row);
+    for(int i = 0; i < _row; i++)
+        matrix[i].resize(_col);
 }
 
 Matrix Matrix::operator*(Matrix &m)
@@ -75,24 +75,7 @@ double Matrix::det()
     {
         double det = 0.0;
         for (int k = 0; k < col; k++)
-        {
-            // Matrix s(row - 1, col - 1);
-            // for (int i = 1; i < row; i++)
-            // {
-            //     int index = 0;
-            //     for (int j = 0; j < col; j++)
-            //     {
-            //         if (j == k)
-            //             continue;
-            //         s.matrix[i - 1][index] = matrix[i][j];
-            //         index++;
-            //     }
-            // }
-
-            // det += matrix[0][k] * pow(-1.0, (k + 1) + 1) * s.det();
-
             det += matrix[0][k] * pow(-1.0, (k + 1) + 1) * this->foo(0, k).det();
-        }
 
         return det;
     }
@@ -132,7 +115,4 @@ void Matrix::print()
 
 Matrix::~Matrix()
 {
-    for (int i = 0; i < row; i++)
-        delete matrix[i];
-    delete matrix;
 }
