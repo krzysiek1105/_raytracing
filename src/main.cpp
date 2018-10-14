@@ -5,6 +5,7 @@
 #include "includes/matrix.hpp"
 #include "includes/triangle.hpp"
 #include "includes/aabb.hpp"
+#include "includes/octtree.hpp"
 
 #include <vector>
 #include <stdio.h>
@@ -22,17 +23,25 @@
 #define HEIGHT 1080
 #define SHADOW_BIAS 0.01
 
-Triangle *hit_info(Ray ray, std::vector<Triangle> &triangles, double &t)
+Triangle *hit_info(Ray ray, Octtree &octtree, double &t)
 {
+    std::vector<Node *> nodes;
+    for(Node &node : octtree.nodes)
+        if(node.aabb.ray_intersection(ray))
+            nodes.push_back(&node);
+
     double t_min = INFINITY;
     Triangle *hit = nullptr;
 
-    for(Triangle &triangle : triangles)
+    for(auto &&node : nodes)
     {
-        if (triangle.intersection(ray, t) && t < t_min)
+        for(Triangle &triangle : node->triangles)
         {
-            t_min = t;
-            hit = &triangle;
+            if (triangle.intersection(ray, t) && t < t_min)
+            {
+                t_min = t;
+                hit = &triangle;
+            }
         }
     }
 
@@ -88,7 +97,7 @@ bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles)
     return true;
 }
 
-void render(std::vector<Triangle> &triangles, std::vector<Light> &lights, Camera &camera, unsigned char **bitmap, int thread_id, int THREAD_COUNT)
+void render(Octtree &octtree, std::vector<Light> &lights, Camera &camera, unsigned char **bitmap, int thread_id, int THREAD_COUNT)
 {
     for (int y = thread_id; y < HEIGHT; y += THREAD_COUNT)
     {
@@ -97,7 +106,7 @@ void render(std::vector<Triangle> &triangles, std::vector<Light> &lights, Camera
             Ray ray = camera.camera_ray(x, y);
 
             double t;
-            Triangle *hit = hit_info(ray, triangles, t);
+            Triangle *hit = hit_info(ray, octtree, t);
 
             if (hit == nullptr)
                 bitmap[y][x] = 32; // background has been hit
@@ -117,7 +126,7 @@ void render(std::vector<Triangle> &triangles, std::vector<Light> &lights, Camera
                     Vector shadow_dir = l_dir.normalized();
                     Ray shadow_ray(shadow_point, shadow_dir);
 
-                    Triangle *shadow_hit = hit_info(shadow_ray, triangles, t);
+                    Triangle *shadow_hit = hit_info(shadow_ray, octtree, t);
                     if (shadow_hit != nullptr && shadow_hit != hit)
                         continue;
 
@@ -158,7 +167,7 @@ int main(int argc, char *argv[])
     Camera camera(WIDTH, HEIGHT, FOV, Vector(3.0, 3.75, 3.0), Vector(-10.0, 70.0, 30.0));
     // Camera camera(WIDTH, HEIGHT, FOV, Vector(0.0, 1.0, 1.5), Vector(-45.0, 0.0, 0.0));
 
-    AABB aabb(triangles);
+    Octtree octtree(triangles);
 
     FILE *f = fopen("o.raw", "wb");
     unsigned char **bitmap = new unsigned char *[HEIGHT];
@@ -169,7 +178,7 @@ int main(int argc, char *argv[])
     std::vector<std::thread> threads;
 
     for (int i = 0; i < THREAD_COUNT; i++)
-        threads.push_back(std::thread(render, std::ref(triangles), std::ref(lights), std::ref(camera), std::ref(bitmap), i, THREAD_COUNT));
+        threads.push_back(std::thread(render, std::ref(octtree), std::ref(lights), std::ref(camera), std::ref(bitmap), i, THREAD_COUNT));
 
     for (int i = 0; i < THREAD_COUNT; i++)
         threads[i].join();
@@ -180,6 +189,8 @@ int main(int argc, char *argv[])
 
     system("cls");
     printf("100.00%%\nt = %.3fs\n", (clock() - (double)start) / CLOCKS_PER_SEC);
-    printf("%.2lf %.2lf %.2lf\n%.2lf %.2lf %.2lf", aabb.min.x, aabb.min.y, aabb.min.z, aabb.max.x, aabb.max.y, aabb.max.z);
+    printf("Total triangles: %llu\n", triangles.size());
+    for(int i = 0; i < 8; i++)
+        printf("%llu ", octtree.nodes[i].triangles.size());
     return 0;
 }
