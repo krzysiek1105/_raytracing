@@ -9,6 +9,7 @@
 #include "octtree.hpp"
 #include "obj_parser.hpp"
 #include "trace.hpp"
+#include "scene.hpp"
 
 #include <vector>
 #include <stdio.h>
@@ -21,21 +22,18 @@
 #include <array>
 #include <stdlib.h>
 
-#define FOV 90
-#define WIDTH 1920
-#define HEIGHT 1080
 #define SHADOW_BIAS 0.01
 
-void render(Octtree &octtree, std::vector<Light> &lights, Camera &camera, unsigned char **bitmap, int thread_id, int THREAD_COUNT)
+void render(Scene &scene, unsigned char **bitmap, int thread_id, int thread_count)
 {
-    for (int y = thread_id; y < HEIGHT; y += THREAD_COUNT)
+    for (int y = thread_id; y < scene.camera.height; y += thread_count)
     {
-        for (int x = 0; x < WIDTH; x++)
+        for (int x = 0; x < scene.camera.width; x++)
         {
-            Ray ray = camera.camera_ray(x, y);
+            Ray ray = scene.camera.camera_ray(x, y);
 
             double t;
-            Triangle *hit = hit_info(ray, octtree, t);
+            Triangle *hit = hit_info(ray, scene.octtree, t);
 
             if (hit == nullptr)
                 bitmap[y][x] = 32; // background has been hit
@@ -45,7 +43,7 @@ void render(Octtree &octtree, std::vector<Light> &lights, Camera &camera, unsign
                 Vector normal = hit->get_normal(hit_point);
 
                 int color = 0;
-                for (Light &l : lights)
+                for (Light &l : scene.lights)
                 {
                     Vector l_dir = -l.direction.normalized();
                     double angle_cos = normal.dot_product(l_dir) / (normal.lenght() * l_dir.lenght());
@@ -55,7 +53,7 @@ void render(Octtree &octtree, std::vector<Light> &lights, Camera &camera, unsign
                     Vector shadow_dir = l_dir.normalized();
                     Ray shadow_ray(shadow_point, shadow_dir);
 
-                    Triangle *shadow_hit = hit_info(shadow_ray, octtree, t);
+                    Triangle *shadow_hit = hit_info(shadow_ray, scene.octtree, t);
                     if (shadow_hit != nullptr && shadow_hit != hit)
                         continue;
 
@@ -69,7 +67,7 @@ void render(Octtree &octtree, std::vector<Light> &lights, Camera &camera, unsign
         if (y % 16 == 0)
         {
             system("cls");
-            printf("%.2f%%\n", 100.0f * y / HEIGHT);
+            printf("%.2f%%\n", 100.0f * y / scene.camera.height);
         }
     }
 }

@@ -22,6 +22,7 @@ class Camera
     Matrix rot_z{3, 3};
 
   public:
+    Camera();
     Camera(int _width, int _height, int _fov, Vector _position, Vector _rotation);
     Ray camera_ray(int x, int y);
     ~Camera();

@@ -1,5 +1,9 @@
 #include "includes/camera.hpp"
 
+Camera::Camera()
+{
+}
+
 Camera::Camera(int _width, int _height, int _fov, Vector _position, Vector _rotation)
 {
     width = _width;

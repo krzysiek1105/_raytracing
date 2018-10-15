@@ -1,5 +1,9 @@
 #include "includes/octtree.hpp"
 
+Octtree::Octtree()
+{
+}
+
 Octtree::Octtree(std::vector<Triangle> &triangles)
 {
     AABB aabb(triangles);

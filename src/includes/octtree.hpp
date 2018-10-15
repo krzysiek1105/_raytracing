@@ -14,5 +14,6 @@ class Octtree
 {
     public:
     std::array<Node, 8> nodes;
+    Octtree();
     Octtree(std::vector<Triangle> &triangles);
 };
