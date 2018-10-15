@@ -1,5 +1,8 @@
 #pragma once
 #include <vector>
+#include <stdio.h>
+#include <string.h>
+
 #include "camera.hpp"
 #include "light.hpp"
 #include "triangle.hpp"
@@ -14,5 +17,9 @@ class Scene
     Camera camera;
     Octtree octtree;
 
-    Scene(const char *file);
+    int width;
+    int height;
+    int fov;
+
+    Scene(const char *scene_filename);
 };
