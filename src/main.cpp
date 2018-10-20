@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     fclose(f);
 
     system("cls");
-    printf("Done in %.3f seconds\n", (clock() - (double)start) / CLOCKS_PER_SEC);
+    printf("Done in %.3lf seconds\n", (clock() - (double)start) / CLOCKS_PER_SEC);
     printf("Total triangles: %llu\n", scene->triangles.size());
     for(Node &node : scene->octtree.nodes)
         printf("%llu ", node.triangles.size());

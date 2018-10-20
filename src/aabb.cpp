@@ -51,7 +51,7 @@ void AABB::extend(Vector &point)
     max.z = std::max(max.z, point.z);
 }
 
-bool AABB::ray_intersection(Ray ray)
+bool AABB::ray_intersection(Ray ray) // https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
 { 
     double tmin = (min.x - ray.origin.x) / ray.direction.x; 
     double tmax = (max.x - ray.origin.x) / ray.direction.x; 

@@ -16,7 +16,7 @@ class Vector
     Vector operator*(double value);
     double dot_product(Vector &v);
     Vector cross_product(Vector &v);
-    double lenght();
+    double length();
     Vector normalized();
     double distance(Vector &v);
     ~Vector();

@@ -48,7 +48,7 @@ void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int 
                 for (Light &l : scene.lights)
                 {
                     Vector l_dir = -l.direction.normalized();
-                    double angle_cos = normal.dot_product(l_dir) / (normal.lenght() * l_dir.lenght());
+                    double angle_cos = normal.dot_product(l_dir) / (normal.length() * l_dir.length());
                     int tmp = (int)(255 * angle_cos * l.intensity);
 
                     Vector shadow_point = normal * SHADOW_BIAS + hit_point;

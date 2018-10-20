@@ -44,14 +44,14 @@ Vector Vector::cross_product(Vector &v)
     return Vector(this->y * v.z - this->z * v.y, -(this->x * v.z - this->z * v.x), this->x * v.y - this->y * v.x);
 }
 
-double Vector::lenght()
+double Vector::length()
 {
     return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
 Vector Vector::normalized()
 {
-    return (*this) * (1.0 / this->lenght());
+    return (*this) * (1.0 / this->length());
 }
 
 double Vector::distance(Vector &v)
