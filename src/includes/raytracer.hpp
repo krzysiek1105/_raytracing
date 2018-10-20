@@ -21,10 +21,12 @@
 #include <thread>
 #include <array>
 #include <stdlib.h>
+#include <iostream>
+#include <cstring>
 
 #define SHADOW_BIAS 0.01
 
-void render(Scene &scene, unsigned char **bitmap, int thread_id, int thread_count)
+void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int thread_count)
 {
     for (int y = thread_id; y < scene.camera.height; y += thread_count)
     {
@@ -36,7 +38,7 @@ void render(Scene &scene, unsigned char **bitmap, int thread_id, int thread_coun
             Triangle *hit = hit_info(ray, scene.octtree, t);
 
             if (hit == nullptr)
-                bitmap[y][x] = 32; // background has been hit
+                bitmap[y * scene.camera.width + x] = scene.background_color;
             else
             {
                 Vector hit_point = ray.direction * t + ray.origin;
@@ -60,7 +62,7 @@ void render(Scene &scene, unsigned char **bitmap, int thread_id, int thread_coun
                     color += std::clamp(tmp, 0, 255);
                 }
 
-                bitmap[y][x] = std::clamp(color, 0, 255);
+                bitmap[y * scene.camera.width + x] = std::clamp(color, 0, 255);
             }
         }
 

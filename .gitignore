@@ -2,5 +2,5 @@
 *.raw
 *.txt
 .vscode/*
-*.obj
+scenes/*
 *.ini

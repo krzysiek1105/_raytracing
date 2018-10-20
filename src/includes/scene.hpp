@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdio.h>
 #include <string.h>
+#include <cstring>
 
 #include "camera.hpp"
 #include "light.hpp"
@@ -16,6 +17,8 @@ class Scene
     std::vector<Light> lights;
     Camera camera;
     Octtree octtree;
+
+    int background_color;
 
     int width;
     int height;
