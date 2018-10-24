@@ -47,19 +47,13 @@ void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int 
                 int color = 0;
                 for (Light &l : scene.lights)
                 {
-                    Vector l_dir = -l.direction.normalized();
-                    double angle_cos = normal.dot_product(l_dir) / (normal.length() * l_dir.length());
-                    int tmp = (int)(255 * angle_cos * l.intensity);
-
                     Vector shadow_point = normal * SHADOW_BIAS + hit_point;
-                    Vector shadow_dir = l_dir.normalized();
+                    Vector shadow_dir = (-(l.direction)).normalized();
                     Ray shadow_ray(shadow_point, shadow_dir);
 
                     Triangle *shadow_hit = hit_info(shadow_ray, scene.octtree, t);
-                    if (shadow_hit != nullptr && shadow_hit != hit)
-                        continue;
-
-                    color += std::clamp(tmp, 0, 255);
+                    if (shadow_hit == nullptr)
+                        color += std::clamp((int)(255 * l.brightness(normal)), 0, 255);
                 }
 
                 bitmap[y * scene.camera.width + x] = std::clamp(color, 0, 255);
