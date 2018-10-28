@@ -4,10 +4,13 @@ Octtree::Octtree()
 {
 }
 
-Octtree::Octtree(std::vector<Triangle> &triangles)
+void Node::split()
 {
-    AABB aabb(triangles);
+    static int level = 0;
+    if(triangles.size() < MAX_TRIANGLES_IN_NODE || level > MAX_RECURSION_LEVEL)
+        return;
 
+    nodes.resize(8);
     nodes[0].aabb = aabb;
     nodes[0].aabb.max.x /= 2;
     nodes[0].aabb.max.y /= 2;
@@ -48,27 +51,35 @@ Octtree::Octtree(std::vector<Triangle> &triangles)
     nodes[7].aabb.min.y = aabb.max.y / 2;
     nodes[7].aabb.min.z = aabb.max.z / 2;
 
-    for(Triangle &triangle : triangles)
+    std::vector<Triangle> tmp;
+    for(Triangle &t : triangles)
     {
-        double min_dist = INFINITY;
-        Node *n = NULL;
-        
-        for(Node &node : nodes)
+        bool found = false;
+        for(Node &n : nodes)
         {
-            Vector triangle_middle = (triangle.vertices[0] + triangle.vertices[1] + triangle.vertices[2]) * (1.0 / 3.0);
-            Vector aabb_middle = node.aabb.min + ((node.aabb.max - node.aabb.min) * 0.5);
-
-            double dist = triangle_middle.distance(aabb_middle);
-            if(dist < min_dist)
+            if(n.aabb.is_point_in_aabb(t.vertices[0]) && n.aabb.is_point_in_aabb(t.vertices[1]) && n.aabb.is_point_in_aabb(t.vertices[2]))
             {
-                min_dist = dist;
-                n = &node;
+                n.triangles.push_back(t);
+                found = true;
+                break;
             }
         }
 
-        n->triangles.push_back(triangle);
-        n->aabb.extend(triangle.vertices[0]);
-        n->aabb.extend(triangle.vertices[1]);
-        n->aabb.extend(triangle.vertices[2]);
+        if(!found)
+            tmp.push_back(t);
     }
+
+    triangles.clear();
+    tmp.swap(triangles);
+
+    level++;
+    for(Node &n : nodes)
+        n.split();
+}
+
+Octtree::Octtree(std::vector<Triangle> &triangles)
+{
+    root.aabb = AABB(triangles);
+    triangles.swap(root.triangles);
+    root.split();
 }
