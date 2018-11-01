@@ -18,15 +18,15 @@
 #include <memory>
 #include <algorithm>
 #include <string>
-#include <thread>
 #include <array>
 #include <stdlib.h>
 #include <iostream>
 #include <cstring>
+#include <atomic>
 
 #define SHADOW_BIAS 0.01
 
-void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int thread_count)
+void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int thread_count, std::atomic<int> *pixels_done)
 {
     for (int y = thread_id; y < scene.camera.height; y += thread_count)
     {
@@ -58,12 +58,7 @@ void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int 
 
                 bitmap[y * scene.camera.width + x] = std::clamp(color, 0, 255);
             }
-        }
-
-        if (y % 16 == 0)
-        {
-            system("cls");
-            printf("%.2f%%\n", 100.0f * y / scene.camera.height);
+            (*pixels_done)++;
         }
     }
 }
