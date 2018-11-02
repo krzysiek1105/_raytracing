@@ -10,6 +10,7 @@
 #include "obj_parser.hpp"
 #include "trace.hpp"
 #include "scene.hpp"
+#include "material.hpp"
 
 #include <vector>
 #include <stdio.h>
@@ -38,13 +39,17 @@ void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int 
             Triangle *hit = hit_info(ray, scene.octtree, t);
 
             if (hit == nullptr)
-                bitmap[y * scene.camera.width + x] = scene.background_color;
+            {
+                bitmap[3 * (y * scene.camera.width + x) + 0] = scene.background_color;
+                bitmap[3 * (y * scene.camera.width + x) + 1] = scene.background_color;
+                bitmap[3 * (y * scene.camera.width + x) + 2] = scene.background_color;
+            }
             else
             {
                 Vector hit_point = ray.direction * t + ray.origin;
                 Vector normal = hit->get_normal(hit_point);
 
-                int color = 0;
+                Color color = {0.0, 0.0, 0.0};
                 for (Light &l : scene.lights)
                 {
                     Vector shadow_point = normal * SHADOW_BIAS + hit_point;
@@ -53,10 +58,34 @@ void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int 
 
                     Triangle *shadow_hit = hit_info(shadow_ray, scene.octtree, t);
                     if (shadow_hit == nullptr)
-                        color += std::clamp((int)(255 * l.brightness(normal)), 0, 255);
-                }
+                    {
+                        if (scene.materials.size() > 0)
+                        {
+                            Material *mat = nullptr;
+                            for (Material &m : scene.materials)
+                            {
+                                if (strcmp(m.name, hit->material_name) == 0)
+                                {
+                                    mat = &m;
+                                    break;
+                                }
+                            }
 
-                bitmap[y * scene.camera.width + x] = std::clamp(color, 0, 255);
+                            color.r += std::clamp(mat->diffuse.r * l.brightness(normal), 0.0, 1.0);
+                            color.g += std::clamp(mat->diffuse.g * l.brightness(normal), 0.0, 1.0);
+                            color.b += std::clamp(mat->diffuse.b * l.brightness(normal), 0.0, 1.0);
+                        }
+                        else
+                        {
+                            color.r += std::clamp(1.0 * l.brightness(normal), 0.0, 1.0);
+                            color.g += std::clamp(1.0 * l.brightness(normal), 0.0, 1.0);
+                            color.b += std::clamp(1.0 * l.brightness(normal), 0.0, 1.0);
+                        }
+                    }
+                }
+                bitmap[3 * (y * scene.camera.width + x) + 0] = std::clamp((int)(255 * color.r), 0, 255);
+                bitmap[3 * (y * scene.camera.width + x) + 1] = std::clamp((int)(255 * color.g), 0, 255);
+                bitmap[3 * (y * scene.camera.width + x) + 2] = std::clamp((int)(255 * color.b), 0, 255);
             }
             (*pixels_done)++;
         }

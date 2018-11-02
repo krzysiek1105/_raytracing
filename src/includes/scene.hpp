@@ -9,11 +9,13 @@
 #include "triangle.hpp"
 #include "octtree.hpp"
 #include "obj_parser.hpp"
+#include "material.hpp"
 
 class Scene
 {
     public:
     std::vector<Triangle> triangles;
+    std::vector<Material> materials;
     std::vector<Light> lights;
     Camera camera;
     Octtree octtree;

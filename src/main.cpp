@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
 
     printf("Starting raytracer..\n");
     std::vector<unsigned char> bitmap;
-    int bitmap_size = scene->camera.width * scene->camera.height;
-    bitmap.reserve(bitmap_size);
+    int pixel_count = scene->camera.width * scene->camera.height;
+    bitmap.resize(pixel_count * 3);
 
     std::vector<std::thread> threads;
     unsigned int thread_count = std::thread::hardware_concurrency();
@@ -40,9 +40,9 @@ int main(int argc, char *argv[])
     for (unsigned int i = 0; i < thread_count; i++)
         threads.push_back(std::thread(render, std::ref(*scene), std::ref(bitmap), i, thread_count, &pixels_done));
 
-    while (pixels_done != bitmap_size)
+    while (pixels_done != pixel_count)
     {
-        printf("Raytracing.. \t%.2lf%%\n", 100 * (double)pixels_done.load() / bitmap_size);
+        printf("Raytracing.. \t%.2lf%%\n", 100 * (double)pixels_done.load() / pixel_count);
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
         threads[i].join();
 
     printf("Saving bitmap..\n");
-    fwrite(&bitmap[0], sizeof(unsigned char), bitmap_size, f);
+    fwrite(&bitmap[0], sizeof(unsigned char), bitmap.size(), f);
     fclose(f);
 
     printf("Done in %.3lf seconds\n", (clock() - (double)start) / CLOCKS_PER_SEC);

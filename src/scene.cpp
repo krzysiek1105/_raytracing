@@ -22,7 +22,7 @@ Scene::Scene(const char *scene_filename)
         {
             char tmp[64];
             if(sscanf(line, "OBJ=%s\n", tmp) == 1)
-                if (!load_obj_from_file(tmp, triangles))
+                if (!load_obj_from_file(tmp, triangles, materials))
                     throw 3;
 
             double x, y, z, i;
