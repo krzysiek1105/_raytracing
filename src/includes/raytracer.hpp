@@ -59,27 +59,20 @@ void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int 
                     Triangle *shadow_hit = hit_info(shadow_ray, scene.octtree, t);
                     if (shadow_hit == nullptr)
                     {
-                        if (scene.materials.size() > 0)
-                        {
-                            Material *mat = nullptr;
-                            for (Material &m : scene.materials)
-                            {
-                                if (strcmp(m.name, hit->material_name) == 0)
-                                {
-                                    mat = &m;
-                                    break;
-                                }
-                            }
+                        double b = std::clamp(l.brightness(normal), 0.0, 1.0);
 
-                            color.r += std::clamp(mat->diffuse.r * l.brightness(normal), 0.0, 1.0);
-                            color.g += std::clamp(mat->diffuse.g * l.brightness(normal), 0.0, 1.0);
-                            color.b += std::clamp(mat->diffuse.b * l.brightness(normal), 0.0, 1.0);
+                        auto mat = scene.materials.find(hit->material_name);
+                        if (mat != scene.materials.end())
+                        {
+                            color.r += mat->second.diffuse.r * b;
+                            color.g += mat->second.diffuse.g * b;
+                            color.b += mat->second.diffuse.b * b;
                         }
                         else
                         {
-                            color.r += std::clamp(1.0 * l.brightness(normal), 0.0, 1.0);
-                            color.g += std::clamp(1.0 * l.brightness(normal), 0.0, 1.0);
-                            color.b += std::clamp(1.0 * l.brightness(normal), 0.0, 1.0);
+                            color.r += b;
+                            color.g += b;
+                            color.b += b;
                         }
                     }
                 }

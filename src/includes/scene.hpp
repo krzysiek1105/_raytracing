@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstring>
+#include <string>
+#include <unordered_map>
 
 #include "camera.hpp"
 #include "light.hpp"
@@ -15,7 +17,7 @@ class Scene
 {
     public:
     std::vector<Triangle> triangles;
-    std::vector<Material> materials;
+    std::unordered_map<std::string, Material> materials;
     std::vector<Light> lights;
     Camera camera;
     Octtree octtree;

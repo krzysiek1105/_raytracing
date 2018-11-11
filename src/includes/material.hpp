@@ -10,6 +10,5 @@ struct Color
 class Material
 {
     public:
-    char name[64];
     Color diffuse;
 };

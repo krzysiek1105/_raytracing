@@ -1,6 +1,6 @@
 #include "includes/obj_parser.hpp"
 
-bool load_mtl_from_file(const char *file_name, std::vector<Material> &materials)
+bool load_mtl_from_file(const char *file_name, std::unordered_map<std::string, Material> &materials)
 {
     FILE *f = fopen(file_name, "r");
     if (f == NULL)
@@ -17,7 +17,6 @@ bool load_mtl_from_file(const char *file_name, std::vector<Material> &materials)
             strtok(name, "\n");
 
             Material tmp;
-            strcpy(tmp.name, name);
 
             fgets(line, 128, f);
             while (strstr(line, "illum") == nullptr)
@@ -26,8 +25,7 @@ bool load_mtl_from_file(const char *file_name, std::vector<Material> &materials)
                 if (strstr(line, "Kd") != nullptr)
                     sscanf(line, "Kd %lf %lf %lf", &tmp.diffuse.r, &tmp.diffuse.g, &tmp.diffuse.b);
             }
-
-            materials.push_back(tmp);
+            materials.insert({name, tmp});
         }
     }
 
@@ -35,7 +33,7 @@ bool load_mtl_from_file(const char *file_name, std::vector<Material> &materials)
     return true;
 }
 
-bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles, std::vector<Material> &materials)
+bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles, std::unordered_map<std::string, Material> &materials)
 {
     FILE *f = fopen(file_name, "r");
     if (f == NULL)
@@ -83,7 +81,7 @@ bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles,
             n[2] = normals[n3 - 1];
 
             Triangle t(v, n);
-            strcpy(t.material_name, current_mat);
+            t.material_name = current_mat;
             triangles.push_back(t);
         }
         else if (line[0] == 'm' && line[1] == 't' && line[2] == 'l' && line[3] == 'l' && line[4] == 'i' && line[5] == 'b') // wtf
