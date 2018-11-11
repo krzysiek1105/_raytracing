@@ -15,10 +15,10 @@ struct Node
     void split();
 };
 
-class Octtree
+class Octree
 {
     public:
     Node root;
-    Octtree();
-    Octtree(std::vector<Triangle> &triangles);
+    Octree();
+    Octree(std::vector<Triangle> &triangles);
 };

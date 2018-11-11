@@ -98,6 +98,9 @@ Matrix Matrix::inverse()
         for (int j = 0; j < col; j++)
             comp.matrix[i][j] = pow(-1.0, (i + 1) + (j + 1)) * this->foo(i, j).det();
 
+    double det = this->det();
+    if(det == 0.0)
+        printf("error\n");
     Matrix out = comp * (1 / this->det());
     return out.transpose();
 }

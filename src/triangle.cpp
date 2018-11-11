@@ -48,35 +48,28 @@ bool Triangle::intersection(Ray ray, double &t) // Möller–Trumbore intersecti
     return t > EPSILON;
 }
 
+double get_triangle_area(double a, double b, double c)
+{
+    double p = (a + b + c) * 0.5;
+    double area_squared = p * (p - a) * (p - b) * (p - c);
+    if (area_squared < 0.0)
+        return 0.0;
+    return sqrt(area_squared);
+}
+
 Vector Triangle::get_normal(Vector &hit_point)
 {
-    Matrix v(4, 1);
-    v.matrix[0][0] = hit_point.x;
-    v.matrix[1][0] = hit_point.y;
-    v.matrix[2][0] = hit_point.z;
-    v.matrix[3][0] = 1.0;
+    double a = vertices[0].distance(vertices[1]);
+    double b = vertices[0].distance(vertices[2]);
+    double c = vertices[1].distance(vertices[2]);
 
-    Matrix r(4, 4);
-    r.matrix[0][0] = vertices[0].x;
-    r.matrix[1][0] = vertices[0].y;
-    r.matrix[2][0] = vertices[0].z;
-    r.matrix[3][0] = 1.0;
+    double d0 = hit_point.distance(vertices[0]);
+    double d1 = hit_point.distance(vertices[1]);
+    double d2 = hit_point.distance(vertices[2]);
 
-    r.matrix[0][1] = vertices[1].x;
-    r.matrix[1][1] = vertices[1].y;
-    r.matrix[2][1] = vertices[1].z;
-    r.matrix[3][1] = 1.0;
+    double a2 = get_triangle_area(a, d0, d1);
+    double a1 = get_triangle_area(b, d0, d2);
+    double a0 = get_triangle_area(c, d1, d2);
 
-    r.matrix[0][2] = vertices[2].x;
-    r.matrix[1][2] = vertices[2].y;
-    r.matrix[2][2] = vertices[2].z;
-    r.matrix[3][2] = 1.0;
-
-    r.matrix[0][3] = 1.0;
-    r.matrix[1][3] = 1.0;
-    r.matrix[2][3] = 1.0;
-    r.matrix[3][3] = 1.0;
-
-    Matrix h = r.inverse() * v;
-    return (normals[0] * h.matrix[0][0] + normals[1] * h.matrix[1][0] + normals[2] * h.matrix[2][0]).normalized();
+    return (normals[0] * a0 + normals[1] * a1 + normals[2] * a2) / (a0 + a1 + a2);
 }

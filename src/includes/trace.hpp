@@ -1,33 +1,31 @@
 #pragma once
 #include "ray.hpp"
 #include "triangle.hpp"
-#include "octtree.hpp"
+#include "octree.hpp"
 
 void find(std::vector<Node *> &nodes, Node &current, Ray ray)
 {
-    if(current.nodes.size() == 0)
-        return;
-    if(current.aabb.ray_intersection(ray))
+    if (current.aabb.ray_intersection(ray))
         nodes.push_back(&current);
-    for(int i = 0; i < 8; i++)
+    for (Node &subnode : current.nodes)
     {
-        if(current.nodes[i].aabb.ray_intersection(ray))
-            nodes.push_back(&current.nodes[i]);
-        find(nodes, current.nodes[i], ray);
+        if (subnode.aabb.ray_intersection(ray))
+            nodes.push_back(&subnode);
+        find(nodes, subnode, ray);
     }
 }
 
-Triangle *hit_info(Ray ray, Octtree &octtree, double &t)
+Triangle *hit_info(Ray ray, Octree &octree, double &t)
 {
     std::vector<Node *> nodes;
-    find(nodes, octtree.root, ray);
+    find(nodes, octree.root, ray);
 
     double t_min = INFINITY;
     Triangle *hit = nullptr;
 
-    for(auto &&node : nodes)
+    for (auto &&node : nodes)
     {
-        for(Triangle &triangle : node->triangles)
+        for (Triangle &triangle : node->triangles)
         {
             if (triangle.intersection(ray, t) && t < t_min)
             {

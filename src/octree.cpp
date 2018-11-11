@@ -1,13 +1,13 @@
-#include "includes/octtree.hpp"
+#include "includes/octree.hpp"
 
-Octtree::Octtree()
+Octree::Octree()
 {
 }
 
 void Node::split()
 {
     static int level = 0;
-    if(triangles.size() < MAX_TRIANGLES_IN_NODE || level > MAX_RECURSION_LEVEL)
+    if(triangles.size() <= MAX_TRIANGLES_IN_NODE || level >= MAX_RECURSION_LEVEL)
         return;
 
     nodes.resize(8);
@@ -77,7 +77,7 @@ void Node::split()
         n.split();
 }
 
-Octtree::Octtree(std::vector<Triangle> &triangles)
+Octree::Octree(std::vector<Triangle> &triangles)
 {
     root.aabb = AABB(triangles);
     triangles.swap(root.triangles);

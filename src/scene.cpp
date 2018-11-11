@@ -32,6 +32,6 @@ Scene::Scene(const char *scene_filename)
     }
 
     fclose(f);
-    octtree = Octtree(triangles);
+    octtree = Octree(triangles);
     camera = Camera(width, height, fov, cam_pos, cam_rot);
 }

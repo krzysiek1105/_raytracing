@@ -6,7 +6,7 @@
 #include "matrix.hpp"
 #include "triangle.hpp"
 #include "aabb.hpp"
-#include "octtree.hpp"
+#include "octree.hpp"
 #include "obj_parser.hpp"
 #include "trace.hpp"
 #include "scene.hpp"

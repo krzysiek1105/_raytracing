@@ -3,6 +3,7 @@
 #include "ray.hpp"
 #include "matrix.hpp"
 #include <string>
+#include <cmath>
 
 class Triangle
 {

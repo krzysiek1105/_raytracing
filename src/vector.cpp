@@ -34,6 +34,11 @@ Vector Vector::operator*(double value)
     return Vector(this->x * value, this->y * value, this->z * value);
 }
 
+Vector Vector::operator/(double value)
+{
+    return Vector(this->x / value, this->y / value, this->z / value);
+}
+
 double Vector::dot_product(Vector v)
 {
     return this->x * v.x + this->y * v.y + this->z * v.z;

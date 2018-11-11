@@ -9,7 +9,7 @@
 #include "camera.hpp"
 #include "light.hpp"
 #include "triangle.hpp"
-#include "octtree.hpp"
+#include "octree.hpp"
 #include "obj_parser.hpp"
 #include "material.hpp"
 
@@ -20,7 +20,7 @@ class Scene
     std::unordered_map<std::string, Material> materials;
     std::vector<Light> lights;
     Camera camera;
-    Octtree octtree;
+    Octree octtree;
 
     int background_color;
 
