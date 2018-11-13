@@ -64,10 +64,10 @@ void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int 
                         auto mat = scene.materials.find(hit->material_name);
                         if (mat != scene.materials.end())
                         {
-                            color.r += mat->second.diffuse.r * b;
-                            color.g += mat->second.diffuse.g * b;
-                            color.b += mat->second.diffuse.b * b;
-                        }
+                            color.r += mat->second.get_diffuse(hit->tex_coor, hit_point).r * b;
+                            color.g += mat->second.get_diffuse(hit->tex_coor, hit_point).g * b;
+                            color.b += mat->second.get_diffuse(hit->tex_coor, hit_point).b * b;
+                        } 
                         else
                         {
                             color.r += b;

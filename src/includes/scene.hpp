@@ -12,12 +12,14 @@
 #include "octree.hpp"
 #include "obj_parser.hpp"
 #include "material.hpp"
+#include "texture.hpp"
 
 class Scene
 {
     public:
     std::vector<Triangle> triangles;
     std::unordered_map<std::string, Material> materials;
+    std::unordered_map<std::string, Texture> textures;
     std::vector<Light> lights;
     Camera camera;
     Octree octtree;

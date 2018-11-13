@@ -1,6 +1,6 @@
 #include "includes/triangle.hpp"
 
-Triangle::Triangle(Vector _vertices[3], Vector _normals[3])
+Triangle::Triangle(Vector _vertices[3], Vector _normals[3], Vector _uv[3])
 {
     vertices[0] = _vertices[0];
     vertices[1] = _vertices[1];
@@ -9,6 +9,10 @@ Triangle::Triangle(Vector _vertices[3], Vector _normals[3])
     normals[0] = _normals[0];
     normals[1] = _normals[1];
     normals[2] = _normals[2];
+
+    tex_coor[0] = _uv[0];
+    tex_coor[1] = _uv[1];
+    tex_coor[2] = _uv[2];
 }
 
 Triangle::~Triangle()
