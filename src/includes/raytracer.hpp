@@ -27,7 +27,7 @@
 
 #define SHADOW_BIAS 0.01
 
-void render(Scene scene, std::vector<unsigned char> &bitmap, int thread_id, int thread_count, std::atomic<int> *pixels_done)
+void render(Scene &scene, std::vector<unsigned char> &bitmap, int thread_id, int thread_count, std::atomic<int> *pixels_done)
 {
     for (int y = thread_id; y < scene.camera.height; y += thread_count)
     {

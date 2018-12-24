@@ -10,7 +10,3 @@ double Light::brightness(Vector normal)
 {
     return (normal.dot_product(-direction) / (normal.length() * direction.length())) * intensity;
 }
-
-Light::~Light()
-{
-}

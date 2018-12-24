@@ -4,7 +4,7 @@ Scene::Scene(const char *scene_filename)
 {
     FILE *f = fopen(scene_filename, "r");
     if(f == nullptr)
-        throw 2;
+        throw std::invalid_argument("Could not open scene file");
 
     Vector cam_pos = Vector();
     Vector cam_rot = Vector();
@@ -23,7 +23,7 @@ Scene::Scene(const char *scene_filename)
             char tmp[64];
             if(sscanf(line, "OBJ=%s\n", tmp) == 1)
                 if (!load_obj_from_file(tmp, triangles, materials))
-                    throw 3;
+                    throw std::invalid_argument("Could not open OBJ file");
 
             double x, y, z, i;
             if(sscanf(line, "LIGHT=%lf %lf %lf | %lf\n", &x, &y, &z, &i) == 4)
