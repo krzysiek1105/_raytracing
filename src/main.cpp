@@ -24,22 +24,22 @@ int main(int argc, char *argv[])
 
         printf("Starting raytracer..\n");
         std::vector<unsigned char> bitmap;
-        int pixel_count = scene.camera.width * scene.camera.height;
-        bitmap.resize(pixel_count * 3);
+        int pixelCount = scene.camera.width * scene.camera.height;
+        bitmap.resize(pixelCount * 3);
 
         std::vector<std::thread> threads;
-        unsigned int thread_count = std::thread::hardware_concurrency();
+        unsigned int threadCount = std::thread::hardware_concurrency();
         std::atomic<int> pixelsDone = 0;
-        for (unsigned int i = 0; i < thread_count; i++)
-            threads.push_back(std::thread(render, std::ref(scene), std::ref(bitmap), i, thread_count, &pixelsDone));
+        for (unsigned int i = 0; i < threadCount; i++)
+            threads.push_back(std::thread(render, std::ref(scene), std::ref(bitmap), i, threadCount, &pixelsDone));
 
-        while (pixelsDone != pixel_count)
+        while (pixelsDone != pixelCount)
         {
-            printf("Raytracing.. \t%.2lf%%\n", 100 * (double)pixelsDone.load() / pixel_count);
+            printf("Raytracing.. \t%.2lf%%\n", 100 * (double)pixelsDone.load() / pixelCount);
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
 
-        for (unsigned int i = 0; i < thread_count; i++)
+        for (unsigned int i = 0; i < threadCount; i++)
             threads[i].join();
 
         printf("Saving bitmap..\n");
