@@ -7,11 +7,11 @@ Vector::Vector()
     z = 0.0;
 }
 
-Vector::Vector(double _x, double _y, double _z)
+Vector::Vector(double x, double y, double z)
 {
-    x = _x;
-    y = _y;
-    z = _z;
+    this->x = x;
+    this->y = y;
+    this->z = z;
 }
 
 Vector Vector::operator+(Vector v) const

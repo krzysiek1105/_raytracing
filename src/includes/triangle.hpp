@@ -10,10 +10,10 @@ class Triangle
   public:
     Vector normals[3];
     Vector vertices[3];
-    std::string material_name;
+    std::string materialName;
 
-    Triangle(Vector _vertices[3], Vector _normals[3]);
+    Triangle(Vector vertices[3], Vector normals[3]);
 
     bool intersection(Ray ray, double &t);
-    Vector getNormal(Vector &hit_point);
+    Vector getNormal(Vector &hitPoint);
 };

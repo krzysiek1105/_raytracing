@@ -20,21 +20,21 @@ Triangle *hitInfo(Ray ray, Octree &octree, double &t)
     std::vector<Node *> nodes;
     find(nodes, octree.root, ray);
 
-    double t_min = INFINITY;
+    double tMin = INFINITY;
     Triangle *hit = nullptr;
 
     for (auto &&node : nodes)
     {
         for (Triangle &triangle : node->triangles)
         {
-            if (triangle.intersection(ray, t) && t < t_min)
+            if (triangle.intersection(ray, t) && t < tMin)
             {
-                t_min = t;
+                tMin = t;
                 hit = &triangle;
             }
         }
     }
 
-    t = t_min;
+    t = tMin;
     return hit;
 }

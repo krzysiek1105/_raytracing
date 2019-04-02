@@ -29,13 +29,13 @@ int main(int argc, char *argv[])
 
         std::vector<std::thread> threads;
         unsigned int thread_count = std::thread::hardware_concurrency();
-        std::atomic<int> pixels_done = 0;
+        std::atomic<int> pixelsDone = 0;
         for (unsigned int i = 0; i < thread_count; i++)
-            threads.push_back(std::thread(render, std::ref(scene), std::ref(bitmap), i, thread_count, &pixels_done));
+            threads.push_back(std::thread(render, std::ref(scene), std::ref(bitmap), i, thread_count, &pixelsDone));
 
-        while (pixels_done != pixel_count)
+        while (pixelsDone != pixel_count)
         {
-            printf("Raytracing.. \t%.2lf%%\n", 100 * (double)pixels_done.load() / pixel_count);
+            printf("Raytracing.. \t%.2lf%%\n", 100 * (double)pixelsDone.load() / pixel_count);
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
 

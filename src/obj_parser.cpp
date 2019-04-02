@@ -1,8 +1,8 @@
 #include "includes/obj_parser.hpp"
 
-bool loadMTLFromFile(const char *file_name, std::unordered_map<std::string, Material> &materials)
+bool loadMTLFromFile(const char *fileName, std::unordered_map<std::string, Material> &materials)
 {
-    FILE *f = fopen(file_name, "r");
+    FILE *f = fopen(fileName, "r");
     if (f == NULL)
         return false;
 
@@ -33,9 +33,9 @@ bool loadMTLFromFile(const char *file_name, std::unordered_map<std::string, Mate
     return true;
 }
 
-bool loadOBJFromFile(const char *file_name, std::vector<Triangle> &triangles, std::unordered_map<std::string, Material> &materials)
+bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std::unordered_map<std::string, Material> &materials)
 {
-    FILE *f = fopen(file_name, "r");
+    FILE *f = fopen(fileName, "r");
     if (f == NULL)
         return false;
 
@@ -81,24 +81,24 @@ bool loadOBJFromFile(const char *file_name, std::vector<Triangle> &triangles, st
             n[2] = normals[n3 - 1];
 
             Triangle t(v, n);
-            t.material_name = currentMat;
+            t.materialName = currentMat;
             triangles.push_back(t);
         }
         else if (line[0] == 'm' && line[1] == 't' && line[2] == 'l' && line[3] == 'l' && line[4] == 'i' && line[5] == 'b') // wtf
         {
 
-            char f_name[32] = {0};
-            sscanf(line, "mtllib %s", f_name);
-            strtok(f_name, "\n");
+            char fName[32] = {0};
+            sscanf(line, "mtllib %s", fName);
+            strtok(fName, "\n");
 
             char path[64] = {0};
-            strcpy(path, file_name);
+            strcpy(path, fileName);
 
             char *p = strrchr(path, '/');
             if (p != nullptr)
                 *p = '\0';
             strcat(path, "/");
-            strcat(path, f_name);
+            strcat(path, fName);
 
             if (!loadMTLFromFile(path, materials))
                 return false;

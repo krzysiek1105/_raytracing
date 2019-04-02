@@ -4,13 +4,13 @@ Camera::Camera()
 {
 }
 
-Camera::Camera(int _width, int _height, int _fov, Vector _position, Vector _rotation)
+Camera::Camera(int width, int height, int fov, Vector position, Vector rotation)
 {
-    width = _width;
-    height = _height;
-    fov = _fov;
-    position = _position;
-    rotation = _rotation;
+    this->width = width;
+    this->height = height;
+    this->fov = fov;
+    this->position = position;
+    this->rotation = rotation;
 
     origin = Vector(position.x, position.y, position.z);
     aspectRatio = (double)width / height;
@@ -19,44 +19,44 @@ Camera::Camera(int _width, int _height, int _fov, Vector _position, Vector _rota
     double angle_y = rotation.y * (M_PI / 180.0);
     double angle_z = rotation.z * (M_PI / 180.0);
 
-    rot_x.matrix[0][0] = 1.0;
-    rot_x.matrix[0][1] = 0.0;
-    rot_x.matrix[0][2] = 0.0;
+    rotX.matrix[0][0] = 1.0;
+    rotX.matrix[0][1] = 0.0;
+    rotX.matrix[0][2] = 0.0;
 
-    rot_x.matrix[1][0] = 0.0;
-    rot_x.matrix[1][1] = cos(angle_x);
-    rot_x.matrix[1][2] = -sin(angle_x);
+    rotX.matrix[1][0] = 0.0;
+    rotX.matrix[1][1] = cos(angle_x);
+    rotX.matrix[1][2] = -sin(angle_x);
 
-    rot_x.matrix[2][0] = 0.0;
-    rot_x.matrix[2][1] = sin(angle_x);
-    rot_x.matrix[2][2] = cos(angle_x);
+    rotX.matrix[2][0] = 0.0;
+    rotX.matrix[2][1] = sin(angle_x);
+    rotX.matrix[2][2] = cos(angle_x);
 
-    rot_y.matrix[0][0] = cos(angle_y);
-    rot_y.matrix[0][1] = 0.0;
-    rot_y.matrix[0][2] = sin(angle_y);
+    rotY.matrix[0][0] = cos(angle_y);
+    rotY.matrix[0][1] = 0.0;
+    rotY.matrix[0][2] = sin(angle_y);
 
-    rot_y.matrix[1][0] = 0.0;
-    rot_y.matrix[1][1] = 1.0;
-    rot_y.matrix[1][2] = 0.0;
+    rotY.matrix[1][0] = 0.0;
+    rotY.matrix[1][1] = 1.0;
+    rotY.matrix[1][2] = 0.0;
 
-    rot_y.matrix[2][0] = -sin(angle_y);
-    rot_y.matrix[2][1] = 0.0;
-    rot_y.matrix[2][2] = cos(angle_y);
+    rotY.matrix[2][0] = -sin(angle_y);
+    rotY.matrix[2][1] = 0.0;
+    rotY.matrix[2][2] = cos(angle_y);
 
-    rot_z.matrix[0][0] = cos(angle_z);
-    rot_z.matrix[0][1] = -sin(angle_z);
-    rot_z.matrix[0][2] = 0.0;
+    rotZ.matrix[0][0] = cos(angle_z);
+    rotZ.matrix[0][1] = -sin(angle_z);
+    rotZ.matrix[0][2] = 0.0;
 
-    rot_z.matrix[1][0] = sin(angle_z);
-    rot_z.matrix[1][1] = cos(angle_z);
-    rot_z.matrix[1][2] = 0.0;
+    rotZ.matrix[1][0] = sin(angle_z);
+    rotZ.matrix[1][1] = cos(angle_z);
+    rotZ.matrix[1][2] = 0.0;
 
-    rot_z.matrix[2][0] = 0.0;
-    rot_z.matrix[2][1] = 0.0;
-    rot_z.matrix[2][2] = 1.0;
+    rotZ.matrix[2][0] = 0.0;
+    rotZ.matrix[2][1] = 0.0;
+    rotZ.matrix[2][2] = 1.0;
 }
 
-Ray Camera::camera_ray(int x, int y)
+Ray Camera::cameraRay(int x, int y)
 {
     Matrix a(3, 1);
     double angle = tan((fov / 2) * (M_PI / 180.0));
@@ -64,9 +64,9 @@ Ray Camera::camera_ray(int x, int y)
     a.matrix[1][0] = (1 - 2 * ((y + 0.5) / (double)height)) * angle;
     a.matrix[2][0] = -1.0;
 
-    Matrix d = rot_y * a;
-    Matrix c = rot_x * d;
-    Matrix out = rot_z * c;
+    Matrix d = rotY * a;
+    Matrix c = rotX * d;
+    Matrix out = rotZ * c;
     Vector point_on_screen(out.matrix[0][0] + position.x, out.matrix[1][0] + position.y, out.matrix[2][0] + position.z);
 
     Vector dir = (point_on_screen - origin).normalized();

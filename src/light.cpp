@@ -1,9 +1,9 @@
 #include "includes/light.hpp"
 
-Light::Light(Vector _direction, double _intensity)
+Light::Light(Vector direction, double intensity)
 {
-    direction = _direction;
-    intensity = _intensity;
+    this->direction = direction;
+    this->intensity = intensity;
 }
 
 double Light::brightness(Vector normal)

@@ -1,14 +1,14 @@
 #include "includes/triangle.hpp"
 
-Triangle::Triangle(Vector _vertices[3], Vector _normals[3])
+Triangle::Triangle(Vector vertices[3], Vector normals[3])
 {
-    vertices[0] = _vertices[0];
-    vertices[1] = _vertices[1];
-    vertices[2] = _vertices[2];
+    this->vertices[0] = vertices[0];
+    this->vertices[1] = vertices[1];
+    this->vertices[2] = vertices[2];
 
-    normals[0] = _normals[0];
-    normals[1] = _normals[1];
-    normals[2] = _normals[2];
+    this->normals[0] = normals[0];
+    this->normals[1] = normals[1];
+    this->normals[2] = normals[2];
 }
 
 bool Triangle::intersection(Ray ray, double &t) // Möller–Trumbore intersection algorithm
@@ -44,28 +44,28 @@ bool Triangle::intersection(Ray ray, double &t) // Möller–Trumbore intersecti
     return t > EPSILON;
 }
 
-double get_triangle_area(double a, double b, double c)
+double getTriangleArea(double a, double b, double c)
 {
     double p = (a + b + c) * 0.5;
-    double area_squared = p * (p - a) * (p - b) * (p - c);
-    if (area_squared < 0.0)
+    double areaSquared = p * (p - a) * (p - b) * (p - c);
+    if (areaSquared < 0.0)
         return 0.0;
-    return sqrt(area_squared);
+    return sqrt(areaSquared);
 }
 
-Vector Triangle::getNormal(Vector &hit_point)
+Vector Triangle::getNormal(Vector &hitPoint)
 {
     double a = vertices[0].distance(vertices[1]);
     double b = vertices[0].distance(vertices[2]);
     double c = vertices[1].distance(vertices[2]);
 
-    double d0 = hit_point.distance(vertices[0]);
-    double d1 = hit_point.distance(vertices[1]);
-    double d2 = hit_point.distance(vertices[2]);
+    double d0 = hitPoint.distance(vertices[0]);
+    double d1 = hitPoint.distance(vertices[1]);
+    double d2 = hitPoint.distance(vertices[2]);
 
-    double a2 = get_triangle_area(a, d0, d1);
-    double a1 = get_triangle_area(b, d0, d2);
-    double a0 = get_triangle_area(c, d1, d2);
+    double a2 = getTriangleArea(a, d0, d1);
+    double a1 = getTriangleArea(b, d0, d2);
+    double a0 = getTriangleArea(c, d1, d2);
 
     return (normals[0] * a0 + normals[1] * a1 + normals[2] * a2) / (a0 + a1 + a2);
 }

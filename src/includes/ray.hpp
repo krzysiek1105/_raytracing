@@ -7,5 +7,5 @@ class Ray
     Vector origin;
     Vector direction;
 
-    Ray(Vector _origin, Vector _direction);
+    Ray(Vector origin, Vector direction);
 };

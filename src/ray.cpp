@@ -1,7 +1,7 @@
 #include "includes/ray.hpp"
 
-Ray::Ray(Vector _origin, Vector _direction)
+Ray::Ray(Vector origin, Vector direction)
 {
-    origin = _origin;
-    direction = _direction;
+    this->origin = origin;
+    this->direction = direction;
 }

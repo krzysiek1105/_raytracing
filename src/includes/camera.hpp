@@ -17,12 +17,12 @@ class Camera
   private:
     double aspectRatio;
     Vector origin;
-    Matrix rot_x{3, 3};
-    Matrix rot_y{3, 3};
-    Matrix rot_z{3, 3};
+    Matrix rotX{3, 3};
+    Matrix rotY{3, 3};
+    Matrix rotZ{3, 3};
 
   public:
     Camera();
-    Camera(int _width, int _height, int _fov, Vector _position, Vector _rotation);
-    Ray camera_ray(int x, int y);
+    Camera(int width, int height, int fov, Vector position, Vector rotation);
+    Ray cameraRay(int x, int y);
 };

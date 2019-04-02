@@ -27,13 +27,13 @@
 
 #define SHADOW_BIAS 0.01
 
-void render(Scene &scene, std::vector<unsigned char> &bitmap, int thread_id, int thread_count, std::atomic<int> *pixels_done)
+void render(Scene &scene, std::vector<unsigned char> &bitmap, int threadID, int threadCount, std::atomic<int> *pixelsDone)
 {
-    for (int y = thread_id; y < scene.camera.height; y += thread_count)
+    for (int y = threadID; y < scene.camera.height; y += threadCount)
     {
         for (int x = 0; x < scene.camera.width; x++)
         {
-            Ray ray = scene.camera.camera_ray(x, y);
+            Ray ray = scene.camera.cameraRay(x, y);
 
             double t;
             Triangle *hit = hitInfo(ray, scene.octtree, t);
@@ -46,22 +46,22 @@ void render(Scene &scene, std::vector<unsigned char> &bitmap, int thread_id, int
             }
             else
             {
-                Vector hit_point = ray.direction * t + ray.origin;
-                Vector normal = hit->getNormal(hit_point);
+                Vector hitPoint = ray.direction * t + ray.origin;
+                Vector normal = hit->getNormal(hitPoint);
 
                 Color color = {0.0, 0.0, 0.0};
                 for (Light &l : scene.lights)
                 {
-                    Vector shadow_point = normal * SHADOW_BIAS + hit_point;
-                    Vector shadow_dir = (-(l.direction)).normalized();
-                    Ray shadow_ray(shadow_point, shadow_dir);
+                    Vector shadowPoint = normal * SHADOW_BIAS + hitPoint;
+                    Vector shadowDir = (-(l.direction)).normalized();
+                    Ray shadow_ray(shadowPoint, shadowDir);
 
                     Triangle *shadow_hit = hitInfo(shadow_ray, scene.octtree, t);
                     if (shadow_hit == nullptr)
                     {
                         double b = std::clamp(l.brightness(normal), 0.0, 1.0);
 
-                        auto mat = scene.materials.find(hit->material_name);
+                        auto mat = scene.materials.find(hit->materialName);
                         if (mat != scene.materials.end())
                         {
                             color.r += mat->second.diffuse.r * b;
@@ -80,7 +80,7 @@ void render(Scene &scene, std::vector<unsigned char> &bitmap, int thread_id, int
                 bitmap[3 * (y * scene.camera.width + x) + 1] = std::clamp((int)(255 * color.g), 0, 255);
                 bitmap[3 * (y * scene.camera.width + x) + 2] = std::clamp((int)(255 * color.b), 0, 255);
             }
-            (*pixels_done)++;
+            (*pixelsDone)++;
         }
     }
 }

@@ -7,6 +7,6 @@ class Light
     Vector direction;
     double intensity;
 
-    Light(Vector _direction, double _intensity);
+    Light(Vector direction, double intensity);
     double brightness(Vector normal);
 };
