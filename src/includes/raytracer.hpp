@@ -36,18 +36,18 @@ void render(Scene &scene, std::vector<unsigned char> &bitmap, int thread_id, int
             Ray ray = scene.camera.camera_ray(x, y);
 
             double t;
-            Triangle *hit = hit_info(ray, scene.octtree, t);
+            Triangle *hit = hitInfo(ray, scene.octtree, t);
 
             if (hit == nullptr)
             {
-                bitmap[3 * (y * scene.camera.width + x) + 0] = scene.background_color;
-                bitmap[3 * (y * scene.camera.width + x) + 1] = scene.background_color;
-                bitmap[3 * (y * scene.camera.width + x) + 2] = scene.background_color;
+                bitmap[3 * (y * scene.camera.width + x) + 0] = scene.backgroundColor;
+                bitmap[3 * (y * scene.camera.width + x) + 1] = scene.backgroundColor;
+                bitmap[3 * (y * scene.camera.width + x) + 2] = scene.backgroundColor;
             }
             else
             {
                 Vector hit_point = ray.direction * t + ray.origin;
-                Vector normal = hit->get_normal(hit_point);
+                Vector normal = hit->getNormal(hit_point);
 
                 Color color = {0.0, 0.0, 0.0};
                 for (Light &l : scene.lights)
@@ -56,7 +56,7 @@ void render(Scene &scene, std::vector<unsigned char> &bitmap, int thread_id, int
                     Vector shadow_dir = (-(l.direction)).normalized();
                     Ray shadow_ray(shadow_point, shadow_dir);
 
-                    Triangle *shadow_hit = hit_info(shadow_ray, scene.octtree, t);
+                    Triangle *shadow_hit = hitInfo(shadow_ray, scene.octtree, t);
                     if (shadow_hit == nullptr)
                     {
                         double b = std::clamp(l.brightness(normal), 0.0, 1.0);

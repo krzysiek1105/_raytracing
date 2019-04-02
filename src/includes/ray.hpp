@@ -8,5 +8,4 @@ class Ray
     Vector direction;
 
     Ray(Vector _origin, Vector _direction);
-    ~Ray();
 };

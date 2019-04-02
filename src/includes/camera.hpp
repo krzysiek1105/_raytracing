@@ -15,7 +15,7 @@ class Camera
     Vector rotation;
 
   private:
-    double aspect_ratio;
+    double aspectRatio;
     Vector origin;
     Matrix rot_x{3, 3};
     Matrix rot_y{3, 3};

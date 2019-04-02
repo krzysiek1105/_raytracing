@@ -14,56 +14,52 @@ Vector::Vector(double _x, double _y, double _z)
     z = _z;
 }
 
-Vector Vector::operator+(Vector v)
+Vector Vector::operator+(Vector v) const
 {
     return Vector(this->x + v.x, this->y + v.y, this->z + v.z);
 }
 
-Vector Vector::operator-(Vector &v)
+Vector Vector::operator-(Vector v) const
 {
     return Vector(this->x - v.x, this->y - v.y, this->z - v.z);
 }
 
-Vector Vector::operator-()
+Vector Vector::operator-() const
 {
     return Vector(-this->x, -this->y, -this->z);
 }
 
-Vector Vector::operator*(double value)
+Vector Vector::operator*(double value) const
 {
     return Vector(this->x * value, this->y * value, this->z * value);
 }
 
-Vector Vector::operator/(double value)
+Vector Vector::operator/(double value) const
 {
     return Vector(this->x / value, this->y / value, this->z / value);
 }
 
-double Vector::dot_product(Vector v)
+double Vector::dotProduct(Vector v) const
 {
     return this->x * v.x + this->y * v.y + this->z * v.z;
 }
 
-Vector Vector::cross_product(Vector &v)
+Vector Vector::crossProduct(Vector v) const
 {
     return Vector(this->y * v.z - this->z * v.y, -(this->x * v.z - this->z * v.x), this->x * v.y - this->y * v.x);
 }
 
-double Vector::length()
+double Vector::length() const
 {
     return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
-Vector Vector::normalized()
+Vector Vector::normalized() const
 {
     return (*this) * (1.0 / this->length());
 }
 
-double Vector::distance(Vector &v)
+double Vector::distance(Vector v) const
 {
     return sqrt((this->x - v.x) * (this->x - v.x) + (this->y - v.y) * (this->y - v.y) + (this->z - v.z) * (this->z - v.z));
-}
-
-Vector::~Vector()
-{
 }

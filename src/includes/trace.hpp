@@ -5,17 +5,17 @@
 
 void find(std::vector<Node *> &nodes, Node &current, Ray ray)
 {
-    if (current.aabb.ray_intersection(ray))
+    if (current.aabb.rayIntersection(ray))
         nodes.push_back(&current);
     for (Node &subnode : current.nodes)
     {
-        if (subnode.aabb.ray_intersection(ray))
+        if (subnode.aabb.rayIntersection(ray))
             nodes.push_back(&subnode);
         find(nodes, subnode, ray);
     }
 }
 
-Triangle *hit_info(Ray ray, Octree &octree, double &t)
+Triangle *hitInfo(Ray ray, Octree &octree, double &t)
 {
     std::vector<Node *> nodes;
     find(nodes, octree.root, ray);

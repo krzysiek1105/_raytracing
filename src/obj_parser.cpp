@@ -1,6 +1,6 @@
 #include "includes/obj_parser.hpp"
 
-bool load_mtl_from_file(const char *file_name, std::unordered_map<std::string, Material> &materials)
+bool loadMTLFromFile(const char *file_name, std::unordered_map<std::string, Material> &materials)
 {
     FILE *f = fopen(file_name, "r");
     if (f == NULL)
@@ -33,7 +33,7 @@ bool load_mtl_from_file(const char *file_name, std::unordered_map<std::string, M
     return true;
 }
 
-bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles, std::unordered_map<std::string, Material> &materials)
+bool loadOBJFromFile(const char *file_name, std::vector<Triangle> &triangles, std::unordered_map<std::string, Material> &materials)
 {
     FILE *f = fopen(file_name, "r");
     if (f == NULL)
@@ -42,7 +42,7 @@ bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles,
     std::vector<Vector> vertices;
     std::vector<Vector> normals;
 
-    char current_mat[64] = "none";
+    char currentMat[64] = "none";
     while (!feof(f))
     {
         char line[128] = {0};
@@ -50,8 +50,8 @@ bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles,
         fgets(line, 128, f);
         if (strstr(line, "usemtl") != nullptr)
         {
-            sscanf(line, "usemtl %s", current_mat);
-            strtok(current_mat, "\n");
+            sscanf(line, "usemtl %s", currentMat);
+            strtok(currentMat, "\n");
         }
         else if (line[0] == 'v' && line[1] != 'n')
         {
@@ -81,7 +81,7 @@ bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles,
             n[2] = normals[n3 - 1];
 
             Triangle t(v, n);
-            t.material_name = current_mat;
+            t.material_name = currentMat;
             triangles.push_back(t);
         }
         else if (line[0] == 'm' && line[1] == 't' && line[2] == 'l' && line[3] == 'l' && line[4] == 'i' && line[5] == 'b') // wtf
@@ -100,7 +100,7 @@ bool load_obj_from_file(const char *file_name, std::vector<Triangle> &triangles,
             strcat(path, "/");
             strcat(path, f_name);
 
-            if (!load_mtl_from_file(path, materials))
+            if (!loadMTLFromFile(path, materials))
                 return false;
         }
     }

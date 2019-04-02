@@ -11,10 +11,6 @@ Triangle::Triangle(Vector _vertices[3], Vector _normals[3])
     normals[2] = _normals[2];
 }
 
-Triangle::~Triangle()
-{
-}
-
 bool Triangle::intersection(Ray ray, double &t) // Möller–Trumbore intersection algorithm
 {
     const double EPSILON = 0.0000001;
@@ -27,24 +23,24 @@ bool Triangle::intersection(Ray ray, double &t) // Möller–Trumbore intersecti
     double a, f, u, v;
     edge1 = vertex1 - vertex0;
     edge2 = vertex2 - vertex0;
-    h = ray.direction.cross_product(edge2);
-    a = edge1.dot_product(h);
+    h = ray.direction.crossProduct(edge2);
+    a = edge1.dotProduct(h);
 
     if (a > -EPSILON && a < EPSILON)
         return false;
 
     f = 1 / a;
     s = ray.origin - vertex0;
-    u = f * (s.dot_product(h));
+    u = f * (s.dotProduct(h));
     if (u < 0.0 || u > 1.0)
         return false;
 
-    q = s.cross_product(edge1);
-    v = f * ray.direction.dot_product(q);
+    q = s.crossProduct(edge1);
+    v = f * ray.direction.dotProduct(q);
     if (v < 0.0 || u + v > 1.0)
         return false;
 
-    t = f * edge2.dot_product(q);
+    t = f * edge2.dotProduct(q);
     return t > EPSILON;
 }
 
@@ -57,7 +53,7 @@ double get_triangle_area(double a, double b, double c)
     return sqrt(area_squared);
 }
 
-Vector Triangle::get_normal(Vector &hit_point)
+Vector Triangle::getNormal(Vector &hit_point)
 {
     double a = vertices[0].distance(vertices[1]);
     double b = vertices[0].distance(vertices[2]);

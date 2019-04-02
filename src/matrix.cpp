@@ -115,7 +115,3 @@ void Matrix::print()
     }
     printf("\n");
 }
-
-Matrix::~Matrix()
-{
-}

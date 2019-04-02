@@ -22,7 +22,7 @@ class Scene
     Camera camera;
     Octree octtree;
 
-    int background_color;
+    int backgroundColor;
 
     int width;
     int height;

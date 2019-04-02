@@ -35,7 +35,7 @@ AABB::AABB(std::vector<Triangle> &triangles)
     }
 }
 
-bool AABB::is_point_in_aabb(Vector &point)
+bool AABB::isPointInAABB(Vector &point)
 {
     return (point.x <= max.x && point.x >= min.x) && (point.y <= max.y && point.y >= min.y) && (point.z <= max.z && point.z >= min.z);
 }
@@ -51,7 +51,7 @@ void AABB::extend(Vector &point)
     max.z = std::max(max.z, point.z);
 }
 
-bool AABB::ray_intersection(Ray ray) // https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
+bool AABB::rayIntersection(Ray ray) // https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
 { 
     double tmin = (min.x - ray.origin.x) / ray.direction.x; 
     double tmax = (max.x - ray.origin.x) / ray.direction.x; 

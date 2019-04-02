@@ -16,7 +16,7 @@ class AABB
 
 	AABB();
 	AABB(std::vector<Triangle> &triangles);
-	bool is_point_in_aabb(Vector &point);
-	bool ray_intersection(Ray ray);
+	bool isPointInAABB(Vector &point);
+	bool rayIntersection(Ray ray);
 	void extend(Vector &point);
 };

@@ -57,7 +57,7 @@ void Node::split()
         bool found = false;
         for(Node &n : nodes)
         {
-            if(n.aabb.is_point_in_aabb(t.vertices[0]) && n.aabb.is_point_in_aabb(t.vertices[1]) && n.aabb.is_point_in_aabb(t.vertices[2]))
+            if(n.aabb.isPointInAABB(t.vertices[0]) && n.aabb.isPointInAABB(t.vertices[1]) && n.aabb.isPointInAABB(t.vertices[2]))
             {
                 n.triangles.push_back(t);
                 found = true;

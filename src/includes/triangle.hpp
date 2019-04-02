@@ -13,8 +13,7 @@ class Triangle
     std::string material_name;
 
     Triangle(Vector _vertices[3], Vector _normals[3]);
-    ~Triangle();
 
     bool intersection(Ray ray, double &t);
-    Vector get_normal(Vector &hit_point);
+    Vector getNormal(Vector &hit_point);
 };

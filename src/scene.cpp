@@ -6,8 +6,8 @@ Scene::Scene(const char *scene_filename)
     if(f == nullptr)
         throw std::invalid_argument("Could not open scene file");
 
-    Vector cam_pos = Vector();
-    Vector cam_rot = Vector();
+    Vector camPos = Vector();
+    Vector camRot = Vector();
 
     while(!feof(f))
     {
@@ -16,13 +16,13 @@ Scene::Scene(const char *scene_filename)
         if(sscanf(line, "WIDTH=%d\n", &width) == 1) continue;
         else if(sscanf(line, "HEIGHT=%d\n", &height) == 1) continue;
         else if(sscanf(line, "FOV=%d\n", &fov) == 1) continue;
-        else if(sscanf(line, "BACKGROUND=%d\n", &background_color) == 1) continue;
-        else if(sscanf(line, "CAMERA=%lf %lf %lf | %lf %lf %lf\n", &cam_pos.x, &cam_pos.y, &cam_pos.z, &cam_rot.x, &cam_rot.y, &cam_rot.z) == 6) continue;
+        else if(sscanf(line, "BACKGROUND=%d\n", &backgroundColor) == 1) continue;
+        else if(sscanf(line, "CAMERA=%lf %lf %lf | %lf %lf %lf\n", &camPos.x, &camPos.y, &camPos.z, &camRot.x, &camRot.y, &camRot.z) == 6) continue;
         else
         {
             char tmp[64];
             if(sscanf(line, "OBJ=%s\n", tmp) == 1)
-                if (!load_obj_from_file(tmp, triangles, materials))
+                if (!loadOBJFromFile(tmp, triangles, materials))
                     throw std::invalid_argument("Could not open OBJ file");
 
             double x, y, z, i;
@@ -33,5 +33,5 @@ Scene::Scene(const char *scene_filename)
 
     fclose(f);
     octtree = Octree(triangles);
-    camera = Camera(width, height, fov, cam_pos, cam_rot);
+    camera = Camera(width, height, fov, camPos, camRot);
 }

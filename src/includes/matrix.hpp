@@ -18,5 +18,4 @@ class Matrix
 	Matrix transpose();
 	Matrix inverse();
 	void print();
-	~Matrix();
 };
