@@ -24,5 +24,5 @@ class Camera
   public:
     Camera();
     Camera(int width, int height, int fov, Vector position, Vector rotation);
-    Ray cameraRay(int x, int y);
+    Ray cameraRay(int x, int y) const;
 };

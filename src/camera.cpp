@@ -56,7 +56,7 @@ Camera::Camera(int width, int height, int fov, Vector position, Vector rotation)
     rotZ.matrix[2][2] = 1.0;
 }
 
-Ray Camera::cameraRay(int x, int y)
+Ray Camera::cameraRay(int x, int y) const
 {
     Matrix a(3, 1);
     double angle = tan((fov / 2) * (M_PI / 180.0));

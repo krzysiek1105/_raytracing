@@ -6,7 +6,7 @@ Light::Light(Vector direction, double intensity)
     this->intensity = intensity;
 }
 
-double Light::brightness(Vector normal)
+double Light::brightness(Vector normal) const
 {
     return (normal.dotProduct(-direction) / (normal.length() * direction.length())) * intensity;
 }

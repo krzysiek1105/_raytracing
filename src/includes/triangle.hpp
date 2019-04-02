@@ -7,13 +7,13 @@
 
 class Triangle
 {
-  public:
-    Vector normals[3];
-    Vector vertices[3];
-    std::string materialName;
+public:
+  Vector normals[3];
+  Vector vertices[3];
+  std::string materialName;
 
-    Triangle(Vector vertices[3], Vector normals[3]);
+  Triangle(Vector vertices[3], Vector normals[3]);
 
-    bool intersection(Ray ray, double &t);
-    Vector getNormal(Vector &hitPoint);
+  bool intersection(Ray ray, double &t) const;
+  Vector getNormal(Vector &hitPoint) const;
 };

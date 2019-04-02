@@ -3,10 +3,10 @@
 
 class Light
 {
-    public:
+  public:
     Vector direction;
     double intensity;
 
     Light(Vector direction, double intensity);
-    double brightness(Vector normal);
+    double brightness(Vector normal) const;
 };
