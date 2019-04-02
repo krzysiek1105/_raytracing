@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         Scene scene(argv[1]);
 
         FILE *f = fopen(argv[2], "wb");
-        if (f == nullptr)
+        if (f == NULL)
         {
             printf("Error: could not create file %s\n", argv[2]);
             return 1;

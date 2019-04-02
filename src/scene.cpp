@@ -3,7 +3,7 @@
 Scene::Scene(const char *scene_filename)
 {
     FILE *f = fopen(scene_filename, "r");
-    if(f == nullptr)
+    if(f == NULL)
         throw std::invalid_argument("Could not open scene file");
 
     Vector camPos = Vector();

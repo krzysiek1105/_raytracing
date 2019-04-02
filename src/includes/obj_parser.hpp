@@ -6,5 +6,5 @@
 #include "triangle.hpp"
 #include "material.hpp"
 
-bool loadOBJFromFile(const char *file_name, std::vector<Triangle> &triangles, std::unordered_map<std::string, Material> &materials);
-bool loadMTLFromFile(const char *file_name, std::unordered_map<std::string, Material> &materials);
+bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std::unordered_map<std::string, Material> &materials);
+bool loadMTLFromFile(const char *fileName, std::unordered_map<std::string, Material> &materials);

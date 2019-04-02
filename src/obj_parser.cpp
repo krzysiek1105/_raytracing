@@ -10,7 +10,7 @@ bool loadMTLFromFile(const char *fileName, std::unordered_map<std::string, Mater
     {
         char line[128] = {0};
         fgets(line, 128, f);
-        if (strstr(line, "newmtl") != nullptr)
+        if (strstr(line, "newmtl") != NULL)
         {
             char name[32] = {0};
             sscanf(line, "newmtl %s", name);
@@ -19,10 +19,10 @@ bool loadMTLFromFile(const char *fileName, std::unordered_map<std::string, Mater
             Material tmp;
 
             fgets(line, 128, f);
-            while (strstr(line, "illum") == nullptr)
+            while (strstr(line, "illum") == NULL)
             {
                 fgets(line, 128, f);
-                if (strstr(line, "Kd") != nullptr)
+                if (strstr(line, "Kd") != NULL)
                     sscanf(line, "Kd %lf %lf %lf", &tmp.diffuse.r, &tmp.diffuse.g, &tmp.diffuse.b);
             }
             materials.insert({name, tmp});
@@ -46,30 +46,21 @@ bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std
     while (!feof(f))
     {
         char line[128] = {0};
-
         fgets(line, 128, f);
-        if (strstr(line, "usemtl") != nullptr)
-        {
-            sscanf(line, "usemtl %s", currentMat);
-            strtok(currentMat, "\n");
-        }
-        else if (line[0] == 'v' && line[1] != 'n')
-        {
-            double x, y, z;
-            sscanf(line, "v %lf %lf %lf", &x, &y, &z);
-            vertices.push_back(Vector(x, y, z));
-        }
-        else if (line[0] == 'v' && line[1] == 'n')
-        {
-            double x, y, z;
-            sscanf(line, "vn %lf %lf %lf", &x, &y, &z);
-            normals.push_back(Vector(x, y, z));
-        }
-        else if (line[0] == 'f')
-        {
-            int v1, n1, v2, n2, v3, n3;
-            sscanf(line, "f %d//%d %d//%d %d//%d", &v1, &n1, &v2, &n2, &v3, &n3);
 
+        if (sscanf(line, "usemtl %s", currentMat) == 1)
+            strtok(currentMat, "\n");
+
+        double x, y, z;
+        int v1, n1, v2, n2, v3, n3;
+        char fName[32] = {0};
+
+        if (sscanf(line, "v %lf %lf %lf", &x, &y, &z) == 3)
+            vertices.push_back(Vector(x, y, z));
+        else if (sscanf(line, "vn %lf %lf %lf", &x, &y, &z) == 3)
+            normals.push_back(Vector(x, y, z));
+        else if (sscanf(line, "f %d//%d %d//%d %d//%d", &v1, &n1, &v2, &n2, &v3, &n3) == 6)
+        {
             Vector v[3];
             v[0] = vertices[v1 - 1];
             v[1] = vertices[v2 - 1];
@@ -84,18 +75,15 @@ bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std
             t.materialName = currentMat;
             triangles.push_back(t);
         }
-        else if (line[0] == 'm' && line[1] == 't' && line[2] == 'l' && line[3] == 'l' && line[4] == 'i' && line[5] == 'b') // wtf
+        else if (sscanf(line, "mtllib %s", fName) == 1)
         {
-
-            char fName[32] = {0};
-            sscanf(line, "mtllib %s", fName);
             strtok(fName, "\n");
 
             char path[64] = {0};
             strcpy(path, fileName);
 
             char *p = strrchr(path, '/');
-            if (p != nullptr)
+            if (p != NULL)
                 *p = '\0';
             strcat(path, "/");
             strcat(path, fName);
