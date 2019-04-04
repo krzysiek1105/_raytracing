@@ -1,5 +1,16 @@
 #include "includes/obj_parser.hpp"
 
+int findSeparatorInPath(const char *const path)
+{
+    if (path != NULL)
+    {
+        for (int i = strlen(path) - 1; i >= 0; i--)
+            if (path[i] == '/' || path[i] == '\\')
+                return i;
+    }
+    return -1;
+}
+
 bool loadMTLFromFile(const char *fileName, std::unordered_map<std::string, Material> &materials)
 {
     FILE *f = fopen(fileName, "r");
@@ -8,20 +19,20 @@ bool loadMTLFromFile(const char *fileName, std::unordered_map<std::string, Mater
 
     while (!feof(f))
     {
-        char line[128] = {0};
-        fgets(line, 128, f);
+        char line[64] = {0};
+        fgets(line, 64, f);
         if (strstr(line, "newmtl") != NULL)
         {
-            char name[32] = {0};
+            char name[64] = {0};
             sscanf(line, "newmtl %s", name);
             strtok(name, "\n");
 
             Material tmp;
 
-            fgets(line, 128, f);
+            fgets(line, 64, f);
             while (strstr(line, "illum") == NULL)
             {
-                fgets(line, 128, f);
+                fgets(line, 64, f);
                 if (strstr(line, "Kd") != NULL)
                     sscanf(line, "Kd %lf %lf %lf", &tmp.diffuse.r, &tmp.diffuse.g, &tmp.diffuse.b);
             }
@@ -45,16 +56,15 @@ bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std
     char currentMat[64] = "none";
     while (!feof(f))
     {
-        char line[128] = {0};
-        fgets(line, 128, f);
-
-        if (sscanf(line, "usemtl %s", currentMat) == 1)
-            strtok(currentMat, "\n");
+        char line[64] = {0};
+        fgets(line, 64, f);
+        strtok(line, "\n");
 
         double x, y, z;
         int v1, n1, v2, n2, v3, n3;
-        char fName[32] = {0};
+        char fName[64] = {0};
 
+        sscanf(line, "usemtl %s", currentMat);
         if (sscanf(line, "v %lf %lf %lf", &x, &y, &z) == 3)
             vertices.push_back(Vector(x, y, z));
         else if (sscanf(line, "vn %lf %lf %lf", &x, &y, &z) == 3)
@@ -77,15 +87,10 @@ bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std
         }
         else if (sscanf(line, "mtllib %s", fName) == 1)
         {
-            strtok(fName, "\n");
-
             char path[64] = {0};
-            strcpy(path, fileName);
-
-            char *p = strrchr(path, '/');
-            if (p != NULL)
-                *p = '\0';
-            strcat(path, "/");
+            int p = findSeparatorInPath(fileName);
+            if (p != -1)
+                memcpy(path, fileName, (p + 1) * sizeof(char));
             strcat(path, fName);
 
             if (!loadMTLFromFile(path, materials))

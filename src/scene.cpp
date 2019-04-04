@@ -11,8 +11,8 @@ Scene::Scene(const char *scene_filename)
 
     while(!feof(f))
     {
-        char line[128] = {0};
-        fgets(line, 128, f);
+        char line[64] = {0};
+        fgets(line, 64, f);
         if(sscanf(line, "WIDTH=%d\n", &width) == 1) continue;
         else if(sscanf(line, "HEIGHT=%d\n", &height) == 1) continue;
         else if(sscanf(line, "FOV=%d\n", &fov) == 1) continue;
