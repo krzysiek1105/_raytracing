@@ -24,7 +24,7 @@ bool loadMTLFromFile(const char *fileName, std::unordered_map<std::string, Mater
         if (strstr(line, "newmtl") != NULL)
         {
             char name[64] = {0};
-            sscanf(line, "newmtl %s", name);
+            sscanf(line, "newmtl %63s", name);
             strtok(name, "\n");
 
             Material tmp;
@@ -64,7 +64,7 @@ bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std
         int v1, n1, v2, n2, v3, n3;
         char fName[64] = {0};
 
-        sscanf(line, "usemtl %s", currentMat);
+        sscanf(line, "usemtl %63s", currentMat);
         if (sscanf(line, "v %lf %lf %lf", &x, &y, &z) == 3)
             vertices.push_back(Vector(x, y, z));
         else if (sscanf(line, "vn %lf %lf %lf", &x, &y, &z) == 3)
@@ -85,7 +85,7 @@ bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std
             t.materialName = currentMat;
             triangles.push_back(t);
         }
-        else if (sscanf(line, "mtllib %s", fName) == 1)
+        else if (sscanf(line, "mtllib %63s", fName) == 1)
         {
             char path[64] = {0};
             int p = findSeparatorInPath(fileName);
@@ -94,7 +94,10 @@ bool loadOBJFromFile(const char *fileName, std::vector<Triangle> &triangles, std
             strcat(path, fName);
 
             if (!loadMTLFromFile(path, materials))
+            {
+                fclose(f);
                 return false;
+            }
         }
     }
 

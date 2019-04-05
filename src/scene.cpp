@@ -21,9 +21,12 @@ Scene::Scene(const char *scene_filename)
         else
         {
             char tmp[64];
-            if(sscanf(line, "OBJ=%s\n", tmp) == 1)
+            if(sscanf(line, "OBJ=%63s\n", tmp) == 1)
                 if (!loadOBJFromFile(tmp, triangles, materials))
+                {
+                    fclose(f);
                     throw std::invalid_argument("Could not open OBJ file");
+                }
 
             double x, y, z, i;
             if(sscanf(line, "LIGHT=%lf %lf %lf | %lf\n", &x, &y, &z, &i) == 4)
